@@ -28,7 +28,7 @@ public class Game {
     private int playerPoints;
     private List<Card> crupierHand;
     private int crupierPoints;
-    private Status status;   
+    private Status status;
     
     public Game(PlayerDto player) {
         this.player = player;
@@ -44,6 +44,10 @@ public class Game {
         crupierHand = deck.dealCards(2);
         playerPoints = calculatePoints(playerHand);
         crupierPoints = calculatePoints(crupierHand);
+        checkFirstHand();
+    }
+    
+    private void checkFirstHand() {
         if (playerPoints == 21 && crupierPoints == 21) {
             status = Status.DRAW;
             player.setCardGamesDraw(player.getCardGamesDraw() + 1);

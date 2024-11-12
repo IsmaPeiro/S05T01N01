@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -36,12 +35,6 @@ public class GameHandler {
                         ServerResponse.ok()
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .body(gameService.play(id, action), GameDto.class));
-    }
-    
-    public Mono<ServerResponse> getAllByPlayerName(ServerRequest request) {
-        String nickname = request.pathVariable("nickname");
-        Flux<GameDto> games = gameService.getAllByPlayerName(nickname);
-        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(games, GameDto.class);
     }
     
     public Mono<ServerResponse> delete(ServerRequest request) {

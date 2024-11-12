@@ -23,17 +23,11 @@ public class Router {
     @RouterOperations
     public RouterFunction<ServerResponse> appRouter(PlayerHandler playerHandler, GameHandler gameHandler) {
         return RouterFunctions.route()
-                .GET(PLAYER_PATH, playerHandler::getAll)
                 .GET(PLAYER_PATH +"/ranking", playerHandler::ranking)
-                //.GET(PLAYER_PATH + "/{id}", handler::getOne)
-                //.POST(PLAYER_PATH, handler::save)
-                //.PUT(PLAYER_PATH + "/{id}", handler::update)
-                //.DELETE(PLAYER_PATH + "/{id}", handler::delete)
                 .PUT(PLAYER_PATH +"/editnickname/{id}", playerHandler::changeNickname)
                 .POST(GAME_PATH+"/create", gameHandler::createGame)
                 .GET(GAME_PATH +"/{id}", gameHandler::getById)
                 .POST(GAME_PATH+"/{id}/play", gameHandler::play)
-                //.GET(GAME_PATH+"/{nickname}/all", gameHandler::getAllByPlayerName)
                 .DELETE(GAME_PATH + "/delete/{id}", gameHandler::delete)
                 .build();
     }

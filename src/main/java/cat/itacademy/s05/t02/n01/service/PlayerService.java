@@ -24,50 +24,6 @@ public class PlayerService {
     private final PlayerMapper playerMapper;
     private final GameRepository gameRepository;
     
-    public Flux<PlayerDto> getAll() {
-        return playerRepository.findAll().map(playerMapper::toDto)
-                .switchIfEmpty(Flux.error(new CustomException(HttpStatus.BAD_REQUEST, NF_MESSAGE)));
-    }
-    
-    public Mono<PlayerDto> getById(Long id) {
-        return playerRepository.findById(id).map(playerMapper::toDto)
-                .switchIfEmpty(Mono.error(new CustomException(HttpStatus.NOT_FOUND, NF_MESSAGE)));
-    }
-    
-    public Mono<PlayerDto> save(PlayerDto dto) {
-        Mono<Boolean> existsName = playerRepository.findByNickname(dto.getNickname()).hasElement();
-        return existsName.flatMap(exists -> exists
-                ? Mono.error(new CustomException(HttpStatus.BAD_REQUEST, NAME_MESSAGE))
-                : playerRepository.save(Player.builder()
-                .nickname(dto.getNickname())
-                .build())).map(playerMapper::toDto);
-    }
-    
-    public Mono<PlayerDto> update(Long id, PlayerDto dto) {
-        Mono<Boolean> playerId = playerRepository.findById(id).hasElement();
-        Mono<Boolean> playerRepeatedNickname = playerRepository.repeatedNickname(id, dto.getNickname()).hasElement();
-        return playerId.flatMap(
-                        existsId -> existsId
-                                ? playerRepeatedNickname.flatMap(existsName -> existsName
-                                ? Mono.error(new CustomException(HttpStatus.BAD_REQUEST, NAME_MESSAGE))
-                                : playerRepository.save(Player.builder()
-                                .id(id)
-                                .nickname(dto.getNickname())
-                                .cardGamesDraw(dto.getCardGamesDraw())
-                                .cardGamesLost(dto.getCardGamesLost())
-                                .cardGamesWon((dto.getCardGamesWon()))
-                                .build()))
-                                : Mono.error(new CustomException(HttpStatus.NOT_FOUND, NF_MESSAGE)))
-                .map(playerMapper::toDto);
-    }
-    
-    public Mono<Void> delete(Long id) {
-        Mono<Boolean> playerID = playerRepository.findById(id).hasElement();
-        return playerID.flatMap(exists -> exists
-                ? playerRepository.deleteById(id)
-                : Mono.error(new CustomException(HttpStatus.NOT_FOUND, NF_MESSAGE)));
-    }
-    
     public Mono<PlayerDto> changeNickname(Long id, String newNickname) {
         Mono<Player> playerById = playerRepository.findById(id);
         Mono<Boolean> playerRepeatedNickname = playerRepository.repeatedNickname(id, newNickname).hasElement();

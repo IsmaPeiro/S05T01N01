@@ -30,11 +30,6 @@ public class GameService {
                 .switchIfEmpty(Mono.error(new CustomException(HttpStatus.NOT_FOUND, NF_MESSAGE)));
     }
     
-    public Flux<GameDto> getAllByPlayerName(String nickname) {
-        return gameRepository.findAll().filter(game -> game.getPlayer().getNickname().equals(nickname)).map(gameMapper::toDto)
-                .switchIfEmpty(Flux.error(new CustomException(HttpStatus.BAD_REQUEST, NF_MESSAGE)));
-    }
-    
     public Mono<GameDto> createGame(String nickname) {
         Mono<Player> playerMono = playerRepository.findByNickname(nickname);
         return playerMono.switchIfEmpty(Mono.just(Player.builder().nickname(nickname).build())

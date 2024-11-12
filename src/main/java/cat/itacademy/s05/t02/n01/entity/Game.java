@@ -1,6 +1,9 @@
 package cat.itacademy.s05.t02.n01.entity;
 
 import cat.itacademy.s05.t02.n01.dto.PlayerDto;
+import cat.itacademy.s05.t02.n01.enums.Action;
+import cat.itacademy.s05.t02.n01.enums.Rank;
+import cat.itacademy.s05.t02.n01.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,15 +28,7 @@ public class Game {
     private int playerPoints;
     private List<Card> crupierHand;
     private int crupierPoints;
-    private Status status;
-    
-    public enum Status {
-        ON_PROGRESS, PLAYER_WINS, CRUPIER_WINS, DRAW
-    }
-    
-    public enum Actions {
-        HIT, STAND
-    }
+    private Status status;   
     
     public Game(PlayerDto player) {
         this.player = player;
@@ -62,8 +57,8 @@ public class Game {
     }
     
     public int calculatePoints(List<Card> hand) {
-        int points = hand.stream().mapToInt(card -> card.getRank().getValue()).sum();
-        int aceCounter = (int) hand.stream().filter(card -> card.getRank() == Card.Rank.ACE).count();
+        int points = hand.stream().mapToInt(card -> card.rank().getValue()).sum();
+        int aceCounter = (int) hand.stream().filter(card -> card.rank() == Rank.ACE).count();
         while (points > 21 && aceCounter > 0) {
             points -= 10;
             aceCounter--;
@@ -71,7 +66,7 @@ public class Game {
         return points;
     }
     
-    public void makeAMove(Actions action) {
+    public void makeAMove(Action action) {
         switch (action) {
             case HIT -> dealCard();
             case STAND -> crupierMove();

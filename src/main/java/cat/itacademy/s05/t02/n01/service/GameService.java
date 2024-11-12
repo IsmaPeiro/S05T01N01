@@ -4,6 +4,8 @@ import cat.itacademy.s05.t02.n01.dto.GameDto;
 import cat.itacademy.s05.t02.n01.dto.PlayerDto;
 import cat.itacademy.s05.t02.n01.entity.Game;
 import cat.itacademy.s05.t02.n01.entity.Player;
+import cat.itacademy.s05.t02.n01.enums.Action;
+import cat.itacademy.s05.t02.n01.enums.Status;
 import cat.itacademy.s05.t02.n01.exception.CustomException;
 import cat.itacademy.s05.t02.n01.mapper.GameMapper;
 import cat.itacademy.s05.t02.n01.mapper.PlayerMapper;
@@ -47,19 +49,19 @@ public class GameService {
         Mono<Game> game = gameRepository.findById(id);
         return game.switchIfEmpty(Mono.error(new CustomException(HttpStatus.NOT_FOUND, NF_MESSAGE)))
                 .flatMap(g -> {
-                    if (!g.getStatus().equals(Game.Status.ON_PROGRESS)) {
+                    if (!g.getStatus().equals(Status.ON_PROGRESS)) {
                         return Mono.error(new CustomException(HttpStatus.BAD_REQUEST, "The game is over"));
                     } else if (!action.equals("HIT") && !action.equals("STAND")) {
                         return Mono.error(new CustomException(HttpStatus.BAD_REQUEST, "Action no valid"));
                     }
-                    g.makeAMove(Game.Actions.valueOf(action));
+                    g.makeAMove(Action.valueOf(action));
                     return checkEndGame(g).then(gameRepository.save(g))
                             .map(gameMapper::toDto);
                 });
     }
     
     public Mono<PlayerDto> checkEndGame(Game game) {
-        return game.getStatus() == Game.Status.ON_PROGRESS
+        return game.getStatus() == Status.ON_PROGRESS
                 ? Mono.empty()
                 : updatePlayersInGames(game.getPlayer()).then(playerRepository.save(playerMapper.toEntity(game.getPlayer())))
                 .map(playerMapper::toDto);

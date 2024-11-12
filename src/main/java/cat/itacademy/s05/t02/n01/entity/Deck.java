@@ -1,5 +1,7 @@
 package cat.itacademy.s05.t02.n01.entity;
 
+import cat.itacademy.s05.t02.n01.enums.Rank;
+import cat.itacademy.s05.t02.n01.enums.Suit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,8 +21,8 @@ public class Deck {
     private List<Card> cards;
     
     public void createDeck() {
-        cards = Stream.of(Card.Rank.values()).flatMap(rank ->
-                Stream.of(Card.Suit.values()).map(suit ->
+        cards = Stream.of(Rank.values()).flatMap(rank ->
+                Stream.of(Suit.values()).map(suit ->
                         new Card(rank, suit))).collect(Collectors.toList());
         shuffleDeck();
     }

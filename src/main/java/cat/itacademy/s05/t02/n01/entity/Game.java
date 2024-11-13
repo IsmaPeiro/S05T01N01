@@ -4,6 +4,7 @@ import cat.itacademy.s05.t02.n01.dto.PlayerDto;
 import cat.itacademy.s05.t02.n01.enums.Action;
 import cat.itacademy.s05.t02.n01.enums.Rank;
 import cat.itacademy.s05.t02.n01.enums.Status;
+import cat.itacademy.s05.t02.n01.mapper.PlayerMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

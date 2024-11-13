@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>cat.itacademy.s05.t01.n01</groupId>
 	<artifactId>S05T01N01</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>S05T01N01</name>
 	<description>Blackjack</description>
 	<url/>

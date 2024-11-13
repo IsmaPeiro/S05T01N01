@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table (name="players")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
+@Table (name="players")
 public class Player {
     @Id
     private Long id;
